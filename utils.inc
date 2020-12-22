@@ -1,0 +1,2 @@
+InitRandom PROTO
+GetRandom PROTO
