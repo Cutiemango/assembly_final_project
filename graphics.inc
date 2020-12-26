@@ -34,4 +34,5 @@ RenderObstacle PROTO, object: BYTE, position: Coord2D
 RenderDinosaur PROTO, pose: BYTE, position: Coord2D
 RenderDinoCrouch PROTO, pose: BYTE, position: Coord2D
 RenderElement PROTO, character: PTR BYTE, color: BYTE, rowSize: BYTE, position: Coord2D
+RenderFloor PROTO, tick: DWORD, position: Coord2D
 ClearElement PROTO, colSize: BYTE, rowSize: BYTE, position: Coord2D

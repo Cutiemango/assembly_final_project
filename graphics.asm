@@ -98,7 +98,9 @@ map BYTE "                                .                                     
     BYTE "                                                                                                                      ", 0
     BYTE "                                                                                                                      ", 0
     BYTE "                                                                                                                      ", 0
-    BYTE ".,---,---..-.--+--.,,-..,_.--,--'`,---..-.--+--.,,-,,..._.--...._.-.__...,..,___.--,--'`,---..-.--+--.,,-,,..._.--....", 0
+    BYTE "                                                                                                                      ", 0
+
+floor BYTE ".,---,---..-.--+--.,,-..,_.--,--'`,---..-.--+--.,,-,,..._.--...._.-.__...,..,___.--,--'`,---..-.--+--.,,-,,..._.--....", 0
 background_rows BYTE 30
 
 scoreMsg BYTE "Score: ", 0
@@ -184,6 +186,39 @@ renderRow:
     loop renderRow
     ret
 RenderBackground ENDP
+
+RenderFloor PROC USES eax ebx ecx edx esi,
+    tick: DWORD,
+    position: Coord2D
+
+    mov eax, tick
+    mov ebx, 3
+    mul ebx
+    mov edx, 0
+    movzx ebx, background_rows
+    div ebx
+    ; edx = remainder
+    mov esi, OFFSET floor
+    add esi, edx
+    mov ebx, edx ; ebx = remaining floor
+
+    mGotoXY position.X, position.Y
+    mov edx, esi
+    call WriteString
+
+    .IF ebx == 0h ; prevent ecx overflow
+        ret
+    .ENDIF
+
+    mov esi, OFFSET floor
+    mov ecx, ebx
+print_remnant:
+    mov al, [esi]
+    call WriteChar
+    inc esi
+    loop print_remnant
+    ret
+RenderFloor ENDP
 
 RenderScore PROC USES eax edx,
     position: Coord2D

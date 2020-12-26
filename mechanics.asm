@@ -4,8 +4,13 @@ INCLUDE graphics.inc
 .data
 currentScore DWORD 0
 tickTimeStamp DWORD ?
+
+isGameOver BYTE 0
+difficulty BYTE 25
+
 mapCoord Coord2D <0, 0>
 dinoCoord Coord2D <20, 23>
+floorCoord Coord2D <0, 29>
 scoreCoord Coord2D <0, 31>
 endScoreCoord Coord2D <53, 27>
 replayMsgCoord Coord2D <29, 29>
@@ -20,10 +25,15 @@ nextObstacleTick BYTE 5
 
 dinoPose BYTE 0
 isCrouching BYTE 0
+
 jumpTickCounter BYTE 0
 
-isGameOver BYTE 0
-difficulty BYTE 25
+; a total of 16 ticks (10 / 6)
+jumpCoordSeq BYTE 23, 23, 21, 20, 19, 17, 16, 15, 15, 16, 16, 17, 18, 19, 20, 21, 22
+
+hopTickCounter BYTE 0
+; 12 ticks (5 / 7)
+hopCoordSeq BYTE 23, 23, 22, 21, 20, 18, 17, 17, 17, 18, 19, 20, 22
 
 .code
 NextObstacle PROC USES eax ebx esi
@@ -108,11 +118,12 @@ loop_obstacles:
     ret
 CheckCollision ENDP
 
-DoTick PROC USES esi
+DoTick PROC USES eax esi
     INVOKE CheckCollision
     .IF isGameOver == 1h
         ret
     .ENDIF
+    inc currentScore
 
 render_dinosaur:
     ; clear old dino
@@ -123,15 +134,20 @@ render_dinosaur:
     .ENDIF
 
     ; do dino jump
-    .IF jumpTickCounter > 8h
-        dec dinoCoord.Y
-    .ELSEIF jumpTickCounter > 0h
-        inc dinoCoord.Y
-    .ENDIF
-
     .IF jumpTickCounter > 0h
+        movzx esi, jumpTickCounter
+        mov al, jumpCoordSeq[esi]
+        mov dinoCoord.Y, al
         dec jumpTickCounter
     .ENDIF
+
+    .IF hopTickCounter > 0h
+        movzx esi, hopTickCounter
+        mov al, hopCoordSeq[esi]
+        mov dinoCoord.Y, al
+        dec hopTickCounter
+    .ENDIF
+
     .IF isCrouching == 0h
         INVOKE RenderDinosaur, dinoPose, dinoCoord
     .ELSE
@@ -177,16 +193,25 @@ render_obstacle:
         jmp render_obstacle
     .ENDIF
 
-    inc currentScore
+    INVOKE RenderFloor, currentScore, floorCoord
     ret
 DoTick ENDP
 
 ReadInput PROC
     call ReadKey
     .IF ax == 4800h ; up key
-        .IF jumpTickCounter == 0h
-            mov jumpTickCounter, 16
-            mov isCrouching, 0h
+        .IF hopTickCounter == 0h
+            .IF jumpTickCounter == 0h
+                mov jumpTickCounter, 16
+                mov isCrouching, 0h
+            .ENDIF
+        .ENDIF
+    .ELSEIF ax == 2166h ; f key
+        .IF hopTickCounter == 0h
+            .IF jumpTickCounter == 0h
+                mov hopTickCounter, 12
+                mov isCrouching, 0h
+            .ENDIF
         .ENDIF
     .ELSEIF ax == 5000h ; down key
         xor isCrouching, 1h
@@ -206,6 +231,7 @@ ResetVariables PROC
     mov dinoPose, 0h
     mov isCrouching, 0h
     mov jumpTickCounter, 0h
+    mov hopTickCounter, 0h
 
     mov nextObstacleTick, 5
     mov difficulty, 25
@@ -231,7 +257,7 @@ GameStart PROC
     .ENDIF
 
     ; draw map
-    INVOKE RenderBackground, 0h
+    INVOKE RenderBackground, GAME_MAP
 
     ; initialize timeStamp
     INVOKE GetTickCount
