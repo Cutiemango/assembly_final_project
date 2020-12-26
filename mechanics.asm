@@ -7,7 +7,7 @@ tickTimeStamp DWORD ?
 mapCoord Coord2D <0, 0>
 dinoCoord Coord2D <20, 23>
 scoreCoord Coord2D <0, 31>
-endScoreCoord Coord2D <43, 27>
+endScoreCoord Coord2D <48, 27>
 
 cactusInitCoord Coord2D <90, 24>
 birdLowerInitCoord Coord2D <90, 26>
@@ -22,12 +22,15 @@ isCrouching BYTE 0
 jumpTickCounter BYTE 0
 
 isGameOver BYTE 0
+difficulty BYTE 25
 
 .code
 NextObstacle PROC USES eax ebx esi
-    mov eax, 11
+    ; next obstacle tick = 15 ~ 25
+    mov eax, 6
     call RandomRange
-    add eax, 20
+    movzx ebx, difficulty
+    add eax, ebx
     mov nextObstacleTick, al
 
     .IF obstacleCount <= 2h
@@ -39,10 +42,10 @@ loop_obstacles:
                 add esi, 3h
                 jmp loop_obstacles
             .ELSE
-                ret
+                ret ; no space for new obstacle, return
             .ENDIF
         .ELSE
-            ; choose random object
+            ; choose random object (0 ~ 3)
             inc obstacleCount
             mov eax, 4
             call RandomRange
@@ -67,6 +70,19 @@ loop_obstacles:
     .ENDIF
     ret
 NextObstacle ENDP
+
+IncreaseDifficulty PROC USES eax ebx edx
+    mov eax, currentScore
+    mov edx, 0
+    mov ebx, 100
+    div ebx ; edx = remainder
+
+    ; checks if score % 100 = 0
+    .IF edx == 0
+        dec difficulty
+    .ENDIF
+    ret
+IncreaseDifficulty ENDP
 
 CheckCollision PROC
     xor esi, esi
@@ -135,15 +151,17 @@ render_dinosaur:
     xor esi, esi
 render_obstacle:
     .IF obstacles[esi].coords.X > 0h
-
+        ; clear old obstacle
         .IF obstacles[esi].object >= 2h
             INVOKE ClearElement, 9, 3, Coord2D PTR obstacles[esi].coords
         .ELSE
             INVOKE ClearElement, 8, 5, Coord2D PTR obstacles[esi].coords
         .ENDIF
 
+        ; move obstacle
         sub (Coord2D PTR obstacles[esi].coords).X, 3h
 
+        ; determine if we need to re-render the obstacle
         .IF obstacles[esi].coords.X > 0h
             INVOKE RenderObstacle, obstacles[esi].object, Coord2D PTR obstacles[esi].coords
         .ELSE
@@ -152,6 +170,7 @@ render_obstacle:
 
     .ENDIF
 
+    ; go to next index
     .IF esi < 6h
         add esi, 3
         jmp render_obstacle
@@ -163,12 +182,12 @@ DoTick ENDP
 
 ReadInput PROC
     call ReadKey
-    .IF ax == 4800h
+    .IF ax == 4800h ; up key
         .IF jumpTickCounter == 0h
             mov jumpTickCounter, 16
             mov isCrouching, 0h
         .ENDIF
-    .ELSEIF ax == 5000h
+    .ELSEIF ax == 5000h ; down key
         xor isCrouching, 1h
     .ENDIF
     ret
@@ -180,6 +199,7 @@ GetScore PROC
 GetScore ENDP
 
 GameStart PROC
+    ; draw map
     INVOKE RenderBackground, 0h
 
     ; initialize timeStamp
@@ -194,9 +214,10 @@ tick:
     mov ebx, eax
     sub eax, tickTimeStamp
 
-    .IF eax >= 50h
+    .IF eax >= 50
         INVOKE ReadInput
         INVOKE DoTick ; do tick
+        INVOKE IncreaseDifficulty
         mov tickTimeStamp, ebx ; update timeStamp
     .ENDIF
 

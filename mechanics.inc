@@ -1,4 +1,5 @@
 NextObstacle PROTO
+IncreaseDifficulty PROTO
 DoTick PROTO
 CheckCollision PROTO
 ReadInput PROTO
