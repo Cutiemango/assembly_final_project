@@ -1,7 +1,6 @@
 TITLE finalProject
 
 include Irvine32.inc
-include utils.inc
 include graphics.inc
 include mechanics.inc
 
@@ -14,7 +13,6 @@ timeStamp DWORD 0
 .code
 main PROC
     INVOKE InitHandle
-    INVOKE InitRandom
     INVOKE SetConsoleTitle, ADDR gameTitle
 
     INVOKE GameStart

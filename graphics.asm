@@ -15,6 +15,69 @@ ENDM
 outputHandle DWORD ?
 bufferSize COORD <100, 30>
 empty_char BYTE " ", 0
+
+start_screen BYTE "                                                                                                    ", 0
+             BYTE "                                                                                                    ", 0
+             BYTE "                                                                                                    ", 0
+             BYTE "                                                       ###   ###   ####   ###   ###                 ", 0
+             BYTE "                                                       #  #  #  #  #     ##    ##                   ", 0
+             BYTE "                                                       ####  ###   ###    ###   ###                 ", 0
+             BYTE "                                                       #     # ##  #        #     #                 ", 0
+             BYTE "                                                       #     #  #  ####  ####  ####                 ", 0
+             BYTE "                       ############                                                                 ", 0
+             BYTE "                     ################         ######    #######      ##         ####     ########   ", 0
+             BYTE "                     ###  ###########       ###    ##   ##    ##    ####      ###  ##    ##     #   ", 0
+             BYTE "                     ################       ##          ##     #    # ##     ##          ##         ", 0
+             BYTE "                     ################         ####      ##   ###   ##  ##    ##          ######     ", 0
+             BYTE "                     ########                     ##    ######     ######    ##          ##         ", 0
+             BYTE "                     ############                  ##   ##        ##   ##    ##      #   ##         ", 0
+             BYTE "                 ###########                ##    ###   ##        ##    ##    ##    ##   ##     #   ", 0
+             BYTE "    #        ###############                ######      ##       ###    ###    #####     ########   ", 0
+             BYTE "    ##     ####################                                                                     ", 0
+             BYTE "    ###  ##################   #                #####   ###        ###  #####   ##    ###   #####    ", 0
+             BYTE "    #######################                      #    #   #      ##      #     ###   #  #    #      ", 0
+             BYTE "      ####################                       #    #   #       ###    #    ## #   ###     #      ", 0
+             BYTE "        ##################                       #    #   #         #    #    #####  # ##    #      ", 0
+             BYTE "         ##############                          #     ###       ####    #    #   #  #  #    #      ", 0
+             BYTE "             ###  ##                                                                                ", 0
+             BYTE "            ###   ##                                                                                ", 0
+             BYTE "            ##     #                                                                                ", 0
+             BYTE "             ##     ##                                                                              ", 0
+             BYTE "                                                                                                    ", 0
+             BYTE "                                                                                                    ", 0
+             BYTE "                                                                                                    ", 0
+
+end_screen BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                       ########        ##          ##    ##      ########                           ", 0
+           BYTE "                      ##      ##      ####         ###  ###      ##     #                           ", 0
+           BYTE "                     ###       #      # ##        ## ## # ##     ##                                 ", 0
+           BYTE "                     ###             ##  ##       ##  ##  ##     #####                              ", 0
+           BYTE "                     ###    ####     ######       ##  ##  ##     ##                                 ", 0
+           BYTE "                     ###      ##    ##   ##      ##        ##    ##                                 ", 0
+           BYTE "                      ###     ##    ##    ##     ##        ##    ##     #                           ", 0
+           BYTE "                       ########    ###    ###   ####      ####   ########                           ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                       #######      ###      ###    ########    ########                            ", 0
+           BYTE "                      ##     ###     ##      ##     ##     #    ##     ##                           ", 0
+           BYTE "                     ##       ###    ##      ##     ##          ##      #                           ", 0
+           BYTE "  ################   ##       ###    ##     ##      #####       ##    ###    ###################    ", 0
+           BYTE "                     ##       ###     ##    ##      ##          #######                             ", 0
+           BYTE "                     ##       ###     ##   ##       ##          ##   #                              ", 0
+           BYTE "                      ##     ###        ####        ##     #    ##    ##                            ", 0
+           BYTE "                       #######           ##         ########    ##     ####                         ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+           BYTE "                                                                                                    ", 0
+
 map BYTE "              .                                                                                     ", 0
     BYTE "              |                                                                                     ", 0
     BYTE "     .               /                                                                              ", 0
@@ -29,13 +92,13 @@ map BYTE "              .                                                       
     BYTE "       `(       ) )             _ _(   .        )_                     ~- ._ ,. ,.,./    \,.. -~    ", 0
     BYTE "         ` __.:'   )          (                      ))                                             ", 0
     BYTE "      ( )       --'             `- __.___::---__'                                                   ", 0
-    BYTE "                                                                                                    ", 0
-    BYTE "                                                                                                    ", 0
-    BYTE "                                                                                                    ", 0
-    BYTE "                                                                                                    ", 0
-    BYTE "                                                                                                    ", 0
-    BYTE "                                                                                                    ", 0
-    BYTE "                                                                                                    ", 0
+    BYTE "                                                                           __                       ", 0
+    BYTE "       _                                                                 _/   )                     ", 0 
+    BYTE "    /ˊ   ˋ _                                                          (        ˋ'.                  ", 0  
+    BYTE "  (          \                                                      (         _  -~/ˊ         _     ", 0  
+    BYTE "( _  _..       )                                                      ~~~ˊˊ--ˊ              (   ˋ)  ", 0
+    BYTE "       ˋˋ ~~ˊ                                                                              C.     ˋ)", 0
+    BYTE "                                                                                             ˋ~~ˊˋˊ ", 0
     BYTE "                                                                                                    ", 0
     BYTE "                                                                                                    ", 0
     BYTE "                                                                                                    ", 0
@@ -45,7 +108,7 @@ map BYTE "              .                                                       
     BYTE "                                                                                                    ", 0
     BYTE "                                                                                                    ", 0
     BYTE "--..,___.--,--'`,---..-.--+--.,,-,,..._.--...._.-.__...,..,___.--,--'`,---..-.--+--.,,-,,..._.--....", 0
-map_rows BYTE 30
+background_rows BYTE 30
 
 scoreMsg BYTE "Score: ", 0
 
@@ -69,6 +132,17 @@ bird BYTE " _  |\   ", 0
      BYTE "  \__ /-=", 0
 bird_rows BYTE 3
 bird_color BYTE brown
+
+dinosaur_crouch_left BYTE "      ___ ", 0
+                     BYTE "\- --' ._]", 0
+                     BYTE " \_ _/--' ", 0
+                     BYTE "  y i     ", 0
+
+dinosaur_crouch_right BYTE "      ___ ", 0
+                      BYTE "\- --' ._]", 0
+                      BYTE " \_ _/--' ", 0
+                      BYTE "  i v     ", 0
+dinosaur_crouch_rows BYTE 4
 
 dinosaur_right BYTE "       __ ", 0
                BYTE "      / .\", 0
@@ -94,9 +168,19 @@ InitHandle PROC
     ret
 InitHandle ENDP
 
-RenderMap PROC USES eax ecx edx esi
-    movzx ecx, map_rows
-    mov esi, OFFSET map
+RenderBackground PROC USES eax ecx edx esi,
+    mapNumber: BYTE
+
+    movzx ecx, background_rows
+    .IF mapNumber == 0h
+        mov esi, OFFSET map
+    .ELSEIF mapNumber == 1h
+        mov esi, OFFSET start_screen
+    .ELSEIF mapNumber == 2h
+        mov esi, OFFSET end_screen
+    .ELSE
+        ret
+    .ENDIF
 renderRow:
     mov edx, esi
     call WriteString
@@ -107,7 +191,7 @@ renderRow:
     inc esi
     loop renderRow
     ret
-RenderMap ENDP
+RenderBackground ENDP
 
 RenderScore PROC USES eax edx,
     position: Coord2D
@@ -177,6 +261,7 @@ ClearElement ENDP
 RenderDinosaur PROC,
     pose: BYTE,
     position: Coord2D
+
     .IF pose == 1h
         INVOKE RenderElement, OFFSET dinosaur_left, dinosaur_color, dinosaur_rows, position
     .ELSE
@@ -184,6 +269,19 @@ RenderDinosaur PROC,
     .ENDIF
     ret
 RenderDinosaur ENDP
+
+RenderDinoCrouch PROC,
+    pose: BYTE,
+    position: Coord2D
+
+    add position.Y, 2h
+    .IF pose == 1h
+        INVOKE RenderElement, OFFSET dinosaur_crouch_left, dinosaur_color, dinosaur_crouch_rows, position
+    .ELSE
+        INVOKE RenderElement, OFFSET dinosaur_crouch_right, dinosaur_color, dinosaur_crouch_rows, position
+    .ENDIF
+    ret
+RenderDinoCrouch ENDP
 
 RenderObstacle PROC,
     object: BYTE,

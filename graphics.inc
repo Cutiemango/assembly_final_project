@@ -10,9 +10,10 @@ ObstacleData STRUCT
 ObstacleData ENDS
 
 InitHandle PROTO
-RenderMap PROTO
+RenderBackground PROTO, mapNumber: BYTE
 RenderScore PROTO, position: Coord2D
 RenderObstacle PROTO, object: BYTE, position: Coord2D
 RenderDinosaur PROTO, pose: BYTE, position: Coord2D
+RenderDinoCrouch PROTO, pose: BYTE, position: Coord2D
 RenderElement PROTO, character: PTR BYTE, color: BYTE, rowSize: BYTE, position: Coord2D
 ClearElement PROTO, colSize: BYTE, rowSize: BYTE, position: Coord2D

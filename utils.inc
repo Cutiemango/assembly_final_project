@@ -1,2 +1,0 @@
-InitRandom PROTO
-GetRandom PROTO
