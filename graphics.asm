@@ -12,7 +12,7 @@ ENDM
 
 .data
 outputHandle DWORD ?
-bufferSize COORD <100, 25>
+bufferSize COORD <100, 30>
 empty_char BYTE " ", 0
 map BYTE "              .                                                                                     ", 0
     BYTE "              |                                                                                     ", 0
@@ -38,8 +38,13 @@ map BYTE "              .                                                       
     BYTE "                                                                                                    ", 0
     BYTE "                                                                                                    ", 0
     BYTE "                                                                                                    ", 0
+    BYTE "                                                                                                    ", 0
+    BYTE "                                                                                                    ", 0
+    BYTE "                                                                                                    ", 0
+    BYTE "                                                                                                    ", 0
+    BYTE "                                                                                                    ", 0
     BYTE "--..,___.--,--'`,---..-.--+--.,,-,,..._.--...._.-.__...,..,___.--,--'`,---..-.--+--.,,-,,..._.--....", 0
-map_rows BYTE 25
+map_rows BYTE 30
 
 scoreMsg BYTE "Score: ", 0
 
