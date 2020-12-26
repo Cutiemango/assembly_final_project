@@ -56,7 +56,7 @@ end_screen BYTE "                                                               
            BYTE "                                 #######      ###      ###    ########    ########                            ", 0
            BYTE "                                ##     ###     ##      ##     ##     #    ##     ##                           ", 0
            BYTE "                               ##       ###    ##      ##     ##          ##      #                           ", 0
-           BYTE "            ################   ##       ###    ##     ##      #####       ##    ###    ###################    ", 0
+           BYTE "            ################   ##       ###    ##     ##      #####       ##    ###    ################       ", 0
            BYTE "                               ##       ###     ##    ##      ##          #######                             ", 0
            BYTE "                               ##       ###     ##   ##       ##          ##   #                              ", 0
            BYTE "                                ##     ###        ####        ##     #    ##    ##                            ", 0
@@ -163,11 +163,11 @@ RenderBackground PROC USES eax ecx edx esi,
     mapNumber: BYTE
 
     movzx ecx, background_rows
-    .IF mapNumber == 0h
+    .IF mapNumber == GAME_MAP
         mov esi, OFFSET map
-    .ELSEIF mapNumber == 1h
+    .ELSEIF mapNumber == START_MAP
         mov esi, OFFSET start_screen
-    .ELSEIF mapNumber == 2h
+    .ELSEIF mapNumber == END_MAP
         mov esi, OFFSET end_screen
     .ELSE
         ret
@@ -278,11 +278,11 @@ RenderObstacle PROC,
     object: BYTE,
     position: Coord2D
 
-    .IF object == 0h
+    .IF object == CACTUS_1
         INVOKE RenderElement, OFFSET cactus1, cactus_color, cactus1_rows, position
-    .ELSEIF object == 1h
+    .ELSEIF object == CACTUS_2
         INVOKE RenderElement, OFFSET cactus2, cactus_color, cactus2_rows, position
-    .ELSEIF object >= 2h
+    .ELSEIF object >= GROUNDED_BIRD
         INVOKE RenderElement, OFFSET bird, bird_color, bird_rows, position
     .ENDIF
     ret

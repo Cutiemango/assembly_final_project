@@ -3,7 +3,6 @@ Coord2D STRUCT
   Y BYTE ?
 Coord2D ENDS
 
-; type: 0 = cactus1, 1 = cactus2, 2 = bird, 3 = flying bird
 ObstacleData STRUCT
   object BYTE ?
   coords Coord2D <>
@@ -17,6 +16,15 @@ mGotoXY MACRO X, Y
 	call GotoXY
     pop edx
 ENDM
+
+CACTUS_1 = 0h
+CACTUS_2 = 1h
+GROUNDED_BIRD = 2h
+FLYING_BIRD = 3h
+
+GAME_MAP = 0h
+START_MAP = 1h
+END_MAP = 2h
 
 InitHandle PROTO
 RenderBackground PROTO, mapNumber: BYTE

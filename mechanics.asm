@@ -9,9 +9,9 @@ dinoCoord Coord2D <20, 23>
 scoreCoord Coord2D <0, 31>
 endScoreCoord Coord2D <48, 27>
 
-cactusInitCoord Coord2D <90, 24>
-birdLowerInitCoord Coord2D <90, 26>
-birdUpperInitCoord Coord2D <90, 22>
+cactusInitCoord Coord2D <111, 24>
+birdLowerInitCoord Coord2D <111, 26>
+birdUpperInitCoord Coord2D <111, 22>
 
 obstacles ObstacleData <0, <0, 0>>, <0, <0, 0>>, <0, <0, 0>>
 obstacleCount BYTE 1
@@ -26,7 +26,7 @@ difficulty BYTE 25
 
 .code
 NextObstacle PROC USES eax ebx esi
-    ; next obstacle tick = 15 ~ 25
+    ; next obstacle tick = difficulty +- (0 ~ 5)
     mov eax, 6
     call RandomRange
     movzx ebx, difficulty
@@ -51,10 +51,10 @@ loop_obstacles:
             call RandomRange
             mov (ObstacleData PTR obstacles[esi]).object, al
 
-            .IF al == 3h
+            .IF al == FLYING_BIRD
                 mov al, birdUpperInitCoord.X
                 mov bl, birdUpperInitCoord.Y
-            .ELSEIF al == 2h
+            .ELSEIF al == GROUNDED_BIRD
                 mov al, birdLowerInitCoord.X
                 mov bl, birdLowerInitCoord.Y
             .ELSE
@@ -89,11 +89,11 @@ CheckCollision PROC
 loop_obstacles:
     .IF obstacles[esi].coords.X > 20
         .IF obstacles[esi].coords.X < 30
-            .IF isCrouching == 0h
+            .IF isCrouching == 0h ; not crouching
                 .IF dinoCoord.Y > 18
                     inc isGameOver
                     ret
-                .ELSEIF obstacles[esi].object == 3h
+                .ELSEIF obstacles[esi].object == FLYING_BIRD
                     inc isGameOver
                     ret
                 .ENDIF
@@ -152,7 +152,7 @@ render_dinosaur:
 render_obstacle:
     .IF obstacles[esi].coords.X > 0h
         ; clear old obstacle
-        .IF obstacles[esi].object >= 2h
+        .IF obstacles[esi].object >= GROUNDED_BIRD
             INVOKE ClearElement, 9, 3, Coord2D PTR obstacles[esi].coords
         .ELSE
             INVOKE ClearElement, 8, 5, Coord2D PTR obstacles[esi].coords
