@@ -7,6 +7,7 @@ tickTimeStamp DWORD ?
 mapCoord Coord2D <0, 0>
 dinoCoord Coord2D <20, 23>
 scoreCoord Coord2D <0, 31>
+endScoreCoord Coord2D <43, 27>
 
 cactusInitCoord Coord2D <90, 24>
 birdLowerInitCoord Coord2D <90, 26>
@@ -21,8 +22,6 @@ isCrouching BYTE 0
 jumpTickCounter BYTE 0
 
 isGameOver BYTE 0
-
-msg BYTE "GAME OVER", 0
 
 .code
 NextObstacle PROC USES eax ebx esi
@@ -207,7 +206,10 @@ tick:
 GameStart ENDP
 
 GameOver PROC
+    call Clrscr
     INVOKE RenderBackground, 2h
+    INVOKE RenderScore, endScoreCoord
+    mGotoXY 0, 31
     ret
 GameOver ENDP
 END

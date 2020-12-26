@@ -2,15 +2,6 @@ INCLUDE Irvine32.inc
 INCLUDE graphics.inc
 INCLUDE mechanics.inc
 
-; dh = row(Y), dl = col(X)
-mGotoXY MACRO X, Y
-    push edx
-    mov dl, X
-    mov dh, Y
-	call GotoXY
-    pop edx
-ENDM
-
 .data
 outputHandle DWORD ?
 bufferSize COORD <100, 30>
@@ -88,17 +79,17 @@ map BYTE "              .                                                       
     BYTE " -  --==  88888(          ).=--                                           .- ~ ~-(       )_         ", 0
     BYTE "          Y8P(             '__`.                                  _//                    ~ -.       ", 0
     BYTE "        .+(`(      .            )                                |                           ' )_   ", 0
-    BYTE "       ((    (..__.:'-'--___  :        .-~~-.                       \               ..__          .'", 0
+    BYTE "       ((    (..__.:'-'--___  :        .-~~-.                       \               ..__        .'  ", 0
     BYTE "       `(       ) )             _ _(   .        )_                     ~- ._ ,. ,.,./    \,.. -~    ", 0
     BYTE "         ` __.:'   )          (                      ))                                             ", 0
     BYTE "      ( )       --'             `- __.___::---__'                                                   ", 0
     BYTE "                                                                           __                       ", 0
-    BYTE "       _                                                                 _/   )                     ", 0 
-    BYTE "    /ˊ   ˋ _                                                          (        ˋ'.                  ", 0  
-    BYTE "  (          \                                                      (         _  -~/ˊ         _     ", 0  
-    BYTE "( _  _..       )                                                      ~~~ˊˊ--ˊ              (   ˋ)  ", 0
-    BYTE "       ˋˋ ~~ˊ                                                                              C.     ˋ)", 0
-    BYTE "                                                                                             ˋ~~ˊˋˊ ", 0
+    BYTE "      __                                                                 _/   )                     ", 0 
+    BYTE "    /   \ _                                                          (         \'.                  ", 0  
+    BYTE "  (          \                                                      (         __/-~~         __     ", 0  
+    BYTE " ( _  _..     _)                                                      ~~~''--;              (   )   ", 0
+    BYTE "         ~ ~~-                                                                            C.     ') ", 0
+    BYTE "                                                                                            '~~~/   ", 0
     BYTE "                                                                                                    ", 0
     BYTE "                                                                                                    ", 0
     BYTE "                                                                                                    ", 0

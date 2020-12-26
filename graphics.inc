@@ -9,6 +9,15 @@ ObstacleData STRUCT
   coords Coord2D <>
 ObstacleData ENDS
 
+; dh = row(Y), dl = col(X)
+mGotoXY MACRO X, Y
+    push edx
+    mov dl, X
+    mov dh, Y
+	call GotoXY
+    pop edx
+ENDM
+
 InitHandle PROTO
 RenderBackground PROTO, mapNumber: BYTE
 RenderScore PROTO, position: Coord2D
