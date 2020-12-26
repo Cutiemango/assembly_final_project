@@ -3,6 +3,7 @@ IncreaseDifficulty PROTO
 DoTick PROTO
 CheckCollision PROTO
 ReadInput PROTO
+ResetVariables PROTO
 GetScore PROTO
 GameStart PROTO
 GameOver PROTO

@@ -22,11 +22,12 @@ wait_input:
         call Clrscr
         INVOKE GameStart
         INVOKE GameOver
-        call WaitMsg
-        call Clrscr
-    .ELSE
-        jmp wait_input
+    .ELSEIF ax == 011bh ; esc = quit game
+        jmp quit_game
     .ENDIF
+    jmp wait_input
+quit_game:
+    call Clrscr
     exit
 main ENDP
 END main

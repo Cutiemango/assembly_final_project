@@ -102,6 +102,7 @@ map BYTE "                                .                                     
 background_rows BYTE 30
 
 scoreMsg BYTE "Score: ", 0
+replayMsg BYTE "Press SPACE to replay again, or press ESC to quit the game.", 0
 
 cactus1 BYTE "_   _   ", 0
         BYTE "|| // -*", 0
@@ -194,6 +195,16 @@ RenderScore PROC USES eax edx,
     call WriteDec
     ret
 RenderScore ENDP
+
+RenderReplayMsg PROC USES eax edx,
+    position: Coord2D
+
+    mGotoXY position.X, position.Y
+    mov edx, OFFSET replayMsg
+    call WriteString
+    ret
+RenderReplayMsg ENDP
+
 
 RenderElement PROC USES eax ecx edx esi,
     character: PTR BYTE,

@@ -7,14 +7,15 @@ tickTimeStamp DWORD ?
 mapCoord Coord2D <0, 0>
 dinoCoord Coord2D <20, 23>
 scoreCoord Coord2D <0, 31>
-endScoreCoord Coord2D <48, 27>
+endScoreCoord Coord2D <53, 27>
+replayMsgCoord Coord2D <29, 29>
 
 cactusInitCoord Coord2D <111, 24>
 birdLowerInitCoord Coord2D <111, 26>
 birdUpperInitCoord Coord2D <111, 22>
 
 obstacles ObstacleData <0, <0, 0>>, <0, <0, 0>>, <0, <0, 0>>
-obstacleCount BYTE 1
+obstacleCount BYTE 0
 nextObstacleTick BYTE 5
 
 dinoPose BYTE 0
@@ -87,7 +88,7 @@ IncreaseDifficulty ENDP
 CheckCollision PROC
     xor esi, esi
 loop_obstacles:
-    .IF obstacles[esi].coords.X > 20
+    .IF obstacles[esi].coords.X > 15
         .IF obstacles[esi].coords.X < 30
             .IF isCrouching == 0h ; not crouching
                 .IF dinoCoord.Y > 18
@@ -198,7 +199,37 @@ GetScore PROC
     ret
 GetScore ENDP
 
+ResetVariables PROC
+    mov isGameOver, 0h
+    mov currentScore, 0h
+    mov obstacleCount, 0h
+    mov dinoPose, 0h
+    mov isCrouching, 0h
+    mov jumpTickCounter, 0h
+
+    mov nextObstacleTick, 5
+    mov difficulty, 25
+    mov dinoCoord.X, 20
+    mov dinoCoord.Y, 23
+
+    xor esi, esi
+loop_obstacles:
+    mov obstacles[esi].object, 0h
+    mov (Coord2D PTR obstacles[esi].coords).X, 0h
+    mov (Coord2D PTR obstacles[esi].coords).Y, 0h
+    .IF esi < 6h
+        add esi, 3h
+        jmp loop_obstacles
+    .ENDIF
+    ret
+ResetVariables ENDP
+
 GameStart PROC
+    ; renew variables if game over
+    .IF isGameOver == 1h
+        INVOKE ResetVariables
+    .ENDIF
+
     ; draw map
     INVOKE RenderBackground, 0h
 
@@ -230,6 +261,7 @@ GameOver PROC
     call Clrscr
     INVOKE RenderBackground, 2h
     INVOKE RenderScore, endScoreCoord
+    INVOKE RenderReplayMsg, replayMsgCoord
     mGotoXY 0, 31
     ret
 GameOver ENDP

@@ -29,6 +29,7 @@ END_MAP = 2h
 InitHandle PROTO
 RenderBackground PROTO, mapNumber: BYTE
 RenderScore PROTO, position: Coord2D
+RenderReplayMsg PROTO, position: Coord2D
 RenderObstacle PROTO, object: BYTE, position: Coord2D
 RenderDinosaur PROTO, pose: BYTE, position: Coord2D
 RenderDinoCrouch PROTO, pose: BYTE, position: Coord2D
