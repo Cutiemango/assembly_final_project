@@ -18,6 +18,7 @@ main PROC
     INVOKE SetConsoleTitle, ADDR gameTitle
 
     INVOKE GameStart
+    INVOKE GameOver
     call WaitMsg
     call Clrscr
     exit

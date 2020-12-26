@@ -2,6 +2,7 @@ INCLUDE Irvine32.inc
 INCLUDE graphics.inc
 INCLUDE mechanics.inc
 
+; dh = row(Y), dl = col(X)
 mGotoXY MACRO X, Y
     push edx
     mov dl, X
@@ -48,11 +49,11 @@ map_rows BYTE 30
 
 scoreMsg BYTE "Score: ", 0
 
-cactus1 BYTE "_  _   ", 0
-        BYTE "|||| *-", 0
-        BYTE "\\|| ||", 0
-        BYTE "  ||_//", 0
-        BYTE "  ||-- ", 0
+cactus1 BYTE "_   _   ", 0
+        BYTE "|| // -*", 0
+        BYTE "\\||  //", 0
+        BYTE "  ||_// ", 0
+        BYTE "  ||--  ", 0
 cactus1_rows BYTE 5
 
 cactus2 BYTE ",. *.   ", 0
@@ -62,6 +63,12 @@ cactus2 BYTE ",. *.   ", 0
         BYTE "   |.--`", 0
 cactus2_rows BYTE 5
 cactus_color BYTE green
+
+bird BYTE " _  |\   ", 0
+     BYTE "<_]_| \ _", 0
+     BYTE "  \__ /-=", 0
+bird_rows BYTE 3
+bird_color BYTE brown
 
 dinosaur_right BYTE "       __ ", 0
                BYTE "      / .\", 0
@@ -122,7 +129,6 @@ RenderElement PROC USES eax ecx edx esi,
     movzx ecx, rowSize
     mov esi, character
 drawElement:
-    ; dh = row(Y), dl = col(X)
     mGotoXY position.X, position.Y
 
     ; set color
@@ -171,7 +177,7 @@ ClearElement ENDP
 RenderDinosaur PROC,
     pose: BYTE,
     position: Coord2D
-    .IF pose == 1
+    .IF pose == 1h
         INVOKE RenderElement, OFFSET dinosaur_left, dinosaur_color, dinosaur_rows, position
     .ELSE
         INVOKE RenderElement, OFFSET dinosaur_right, dinosaur_color, dinosaur_rows, position
@@ -179,9 +185,17 @@ RenderDinosaur PROC,
     ret
 RenderDinosaur ENDP
 
-RenderCactus PROC,
+RenderObstacle PROC,
+    object: BYTE,
     position: Coord2D
-    INVOKE RenderElement, OFFSET cactus1, cactus_color, cactus1_rows, position
+
+    .IF object == 0h
+        INVOKE RenderElement, OFFSET cactus1, cactus_color, cactus1_rows, position
+    .ELSEIF object == 1h
+        INVOKE RenderElement, OFFSET cactus2, cactus_color, cactus2_rows, position
+    .ELSEIF object >= 2h
+        INVOKE RenderElement, OFFSET bird, bird_color, bird_rows, position
+    .ENDIF
     ret
-RenderCactus ENDP
+RenderObstacle ENDP
 END
