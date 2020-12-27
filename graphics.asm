@@ -5,7 +5,6 @@ INCLUDE mechanics.inc
 .data
 outputHandle DWORD ?
 bufferSize COORD <118, 30>
-empty_char BYTE " ", 0
 
 start_screen BYTE "                                                                                                              ", 0
              BYTE "                                                                                                              ", 0
@@ -104,7 +103,7 @@ floor BYTE ".,---,---..-.--+--.,,-..,_.--,--'`,---..-.--+--.,,-,,..._.--...._.-.
 background_rows BYTE 30
 
 scoreMsg BYTE "Score: ", 0
-replayMsg BYTE "Press SPACE to replay again, or press ESC to quit the game.", 0
+replayMsg BYTE "Press SPACE to play again, or press ESC to quit the game.", 0
 
 cactus1 BYTE "_   _   ", 0
         BYTE "|| // -*", 0
@@ -192,15 +191,13 @@ RenderFloor PROC USES eax ebx ecx edx esi,
     position: Coord2D
 
     mov eax, tick
-    mov ebx, 3
-    mul ebx
     mov edx, 0
     movzx ebx, background_rows
     div ebx
     ; edx = remainder
     mov esi, OFFSET floor
     add esi, edx
-    mov ebx, edx ; ebx = remaining floor
+    mov ebx, edx ; ebx = remaining char count
 
     mGotoXY position.X, position.Y
     mov edx, esi
@@ -271,21 +268,21 @@ drawElement:
     ret
 RenderElement ENDP
 
-ClearElement PROC USES ebx ecx edx,
+ClearElement PROC USES eax ebx ecx,
     colSize: BYTE,
     rowSize: BYTE,
     position: Coord2D
 
+    mov al, " "
     movzx ebx, position.X
     movzx ecx, rowSize
-    mov edx, OFFSET empty_char
 doNextRow:
     push ecx
     movzx ecx, colSize
     mov position.X, bl
 clearColumn:
     mGotoXY position.X, position.Y
-    call WriteString
+    call WriteChar
     inc position.X
     loop clearColumn
     pop ecx

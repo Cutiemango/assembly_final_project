@@ -12,7 +12,7 @@ mapCoord Coord2D <0, 0>
 dinoCoord Coord2D <20, 23>
 floorCoord Coord2D <0, 29>
 scoreCoord Coord2D <0, 31>
-endScoreCoord Coord2D <53, 27>
+endScoreCoord Coord2D <52, 27>
 replayMsgCoord Coord2D <29, 29>
 
 cactusInitCoord Coord2D <111, 24>
@@ -27,12 +27,11 @@ dinoPose BYTE 0
 isCrouching BYTE 0
 
 jumpTickCounter BYTE 0
-
-; a total of 16 ticks (10 / 6)
+; 16 ticks (upward 10 / downward 6)
 jumpCoordSeq BYTE 23, 23, 21, 20, 19, 17, 16, 15, 15, 16, 16, 17, 18, 19, 20, 21, 22
 
 hopTickCounter BYTE 0
-; 12 ticks (5 / 7)
+; 12 ticks (upward 5 / downward 7)
 hopCoordSeq BYTE 23, 23, 22, 21, 20, 18, 17, 17, 17, 18, 19, 20, 22
 
 .code
@@ -50,7 +49,7 @@ NextObstacle PROC USES eax ebx esi
 loop_obstacles:
         .IF obstacles[esi].coords.X > 0h
             .IF esi < 6h
-                add esi, 3h
+                add esi, SIZEOF ObstacleData
                 jmp loop_obstacles
             .ELSE
                 ret ; no space for new obstacle, return
@@ -60,7 +59,7 @@ loop_obstacles:
             inc obstacleCount
             mov eax, 4
             call RandomRange
-            mov (ObstacleData PTR obstacles[esi]).object, al
+            mov obstacles[esi].object, al
 
             .IF al == FLYING_BIRD
                 mov al, birdUpperInitCoord.X
@@ -83,6 +82,9 @@ loop_obstacles:
 NextObstacle ENDP
 
 IncreaseDifficulty PROC USES eax ebx edx
+    ; .IF difficulty == 10h ; sets a threshold for reasonable gameplay
+        ; ret
+    ; .ENDIF
     mov eax, currentScore
     mov edx, 0
     mov ebx, 100
@@ -101,7 +103,7 @@ loop_obstacles:
     .IF obstacles[esi].coords.X > 15
         .IF obstacles[esi].coords.X < 30
             .IF isCrouching == 0h ; not crouching
-                .IF dinoCoord.Y > 18
+                .IF dinoCoord.Y > 19
                     inc isGameOver
                     ret
                 .ELSEIF obstacles[esi].object == FLYING_BIRD
@@ -112,7 +114,7 @@ loop_obstacles:
         .ENDIF
     .ENDIF
     .IF esi < 6h
-        add esi, 3h
+        add esi, SIZEOF ObstacleData
         jmp loop_obstacles
     .ENDIF
     ret
@@ -189,11 +191,14 @@ render_obstacle:
 
     ; go to next index
     .IF esi < 6h
-        add esi, 3
+        add esi, SIZEOF ObstacleData
         jmp render_obstacle
     .ENDIF
 
-    INVOKE RenderFloor, currentScore, floorCoord
+    mov eax, currentScore
+    mov esi, 3
+    mul esi
+    INVOKE RenderFloor, eax, floorCoord
     ret
 DoTick ENDP
 
@@ -244,7 +249,7 @@ loop_obstacles:
     mov (Coord2D PTR obstacles[esi].coords).X, 0h
     mov (Coord2D PTR obstacles[esi].coords).Y, 0h
     .IF esi < 6h
-        add esi, 3h
+        add esi, SIZEOF ObstacleData
         jmp loop_obstacles
     .ENDIF
     ret
@@ -285,7 +290,7 @@ GameStart ENDP
 
 GameOver PROC
     call Clrscr
-    INVOKE RenderBackground, 2h
+    INVOKE RenderBackground, END_MAP
     INVOKE RenderScore, endScoreCoord
     INVOKE RenderReplayMsg, replayMsgCoord
     mGotoXY 0, 31

@@ -15,7 +15,7 @@ main PROC
     INVOKE InitHandle
     INVOKE SetConsoleTitle, ADDR gameTitle
 
-    INVOKE RenderBackground, 1h
+    INVOKE RenderBackground, START_MAP
 wait_input:
     call ReadChar
     .IF ax == 3920h ; wait for space key
